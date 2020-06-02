@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+#define ll long long int
+using namespace std;
+
+unsigned long long int mod =1e9+7;
+int count1=0;
+void printGraph(vector<vector<int>>&adj, int v)
+{
+    for(int i=0;i<adj.size();i++)
+    {
+        cout << "\n Adjacency list of vertex "
+             << i << "\n head ";
+        for(auto &s: adj[i])
+            cout<<"->"<<s;
+    }
+}
+int dfs(vector<vector<int>>&graph, vector<bool>&vis, int v, int &count2)
+{
+    vis[v]=true;
+
+    for(auto s: graph[v])
+    {
+        if(vis[s]==false)
+        {
+            count2++;
+            dfs(graph, vis, s, count2);
+        }
+    }
+    return count2;
+}
+
+void addEdge(vector<vector<int>>&graph,vector<vector<int>>&edges)
+{
+    for(int i=0;i<edges.size();i++)
+    {
+        graph[edges[i][0]].push_back(edges[i][1]);
+        graph[edges[i][1]].push_back(edges[i][0]);
+    }
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int k;
+    cin>>k;
+    int n;
+    cin>>n;
+    vector<vector<int>>graph(k);
+    vector<vector<int>>edges(n, vector<int>(2));
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<2;j++)
+        {
+            cin>>edges[i][j];
+        }
+    }
+    int ans=0, count2=0;
+    vector<bool> vis(k,false);
+    addEdge(graph, edges);
+    vector<int>aa;
+    //printGraph(graph,0);
+    for(int  i=0;i<k;i++)
+    {
+        if(vis[i]==false)
+        {
+        int count2=1;
+        int x;
+        x=dfs(graph,vis,i,count2);
+        //cout<<x<<" ";
+        aa.push_back(x);
+        }
+    }
+    //cout<<aa.size();
+    for(int i=0;i<aa.size();i++)
+    {
+        //cout<<aa[i]<<" ";
+        for(int j=i+1;j<aa.size();j++)
+        {
+            ans+=(aa[i]*aa[j]);
+        }
+
+    }
+    cout<<ans;
+}
